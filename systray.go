@@ -12,12 +12,14 @@ import (
 	"github.com/getlantern/golog"
 )
 
+type MenuItems map[int32]*MenuItem
+
 var (
 	log = golog.LoggerFor("systray")
 
 	systrayReady  func()
 	systrayExit   func()
-	menuItems     = make(map[int32]*MenuItem)
+	menuItems     = make(MenuItems)
 	menuItemsLock sync.RWMutex
 
 	currentID = int32(-1)
@@ -66,6 +68,18 @@ func newMenuItem(title string, tooltip string, parent *MenuItem) *MenuItem {
 		checked:   false,
 		parent:    parent,
 	}
+}
+
+func (t *MenuItems) Reset() {
+	menuItemsLock.Lock()
+	*t = MenuItems{}
+	menuItemsLock.Unlock()
+}
+
+func (t *MenuItems) Remove(item *MenuItem) {
+	menuItemsLock.Lock()
+	delete(menuItems, item.id)
+	menuItemsLock.Unlock()
 }
 
 // Run initializes GUI and starts the event loop, then invokes the onReady
