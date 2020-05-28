@@ -70,6 +70,10 @@ func newMenuItem(title string, tooltip string, parent *MenuItem) *MenuItem {
 	}
 }
 
+func GetMenuItems() MenuItems {
+	return menuItems
+}
+
 func (t *MenuItems) Reset() {
 	menuItemsLock.Lock()
 	*t = MenuItems{}
