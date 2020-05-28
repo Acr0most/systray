@@ -76,7 +76,11 @@ func GetMenuItems() MenuItems {
 
 func (t *MenuItems) Reset() {
 	menuItemsLock.Lock()
-	*t = MenuItems{}
+
+	for key := range *t {
+		delete(*t, key)
+	}
+
 	menuItemsLock.Unlock()
 }
 
