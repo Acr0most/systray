@@ -77,7 +77,8 @@ func GetMenuItems() MenuItems {
 func (t *MenuItems) Reset() {
 	menuItemsLock.Lock()
 
-	for key := range *t {
+	for key, item := range *t {
+		hideMenuItem(item)
 		delete(*t, key)
 	}
 
@@ -86,7 +87,10 @@ func (t *MenuItems) Reset() {
 
 func (t *MenuItems) Remove(item *MenuItem) {
 	menuItemsLock.Lock()
+
+	hideMenuItem(item)
 	delete(menuItems, item.id)
+
 	menuItemsLock.Unlock()
 }
 
